@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		  <meta charset="utf-8">
+		  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">        
+		  <meta name="viewport" content="width=device-width, initial-scale=1">
+		  <title>Procesamiento Digital de Imagenes</title>
+		  <meta name="description" content="">
+		  <meta name="viewport" content="width=device-width">
+		  <link href="estilo.css" rel="stylesheet" type="text/css">
+		  <link href="font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		  <script type="text/javascript" src="jquery-3.1.0.min.js"></script>
+		  <script src="codigo.js" language="javascript" type="text/javascript"></script>
+
+		  <!-- HISTOGRAMA -->  
+
+		  <script src="plotly-latest.min.js"></script>
+		
+		  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</head>
+
+	<body onload="true">
+		<div class="Titulo">
+			<h1>Procesamiento Digital de Imagenes</h1>
+			<h3>Tarea 2 - Bitmap</h3>
+		</div>	
+
+		<div class="botonesLeft" aling="center">
+				
+			<div class="cargar-imagen">
+				<h3>Seleccione una imagen</h3>
+
+				<label class="boton">
+					<input type="file" id="input"/>
+					Cargar
+				</label>
+				<br>
+				<br>
+				<a class="boton" id="download">Descargar</a>
+			</div>
+
+
+			<h3>Escoja una opción</h3>
+
+			<!-- MODAL -->
+			<!-- Trigger the modal with a button -->
+			<input type="button" class="boton" data-toggle="modal" data-target="#myModal" onclick="MostrarInforBMP()" value="Información">
+			
+			<!-- Modal -->
+			<div class="modal fade" id="myModal" role="dialog">
+				<div class="modal-dialog">
+
+					<!-- Modal content-->
+					<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title">Informacion de Imagen</h4>
+					</div>
+					<div class="modal-body" id="InfoBMP">
+
+					</div>
+					<div class="modal-footer">
+						<input type="button" class="btn btn-default" data-dismiss="modal" value="Close">
+					</div>
+					</div>
+
+				</div>
+			</div>
+
+			<input class="boton" type="button" value="Original" onclick="Controlador('Original')">
+			<input class="boton" type="button" value="Negativo" onclick="Controlador('Negativo')">
+			<input class="boton" type="button" value="Gris" onclick="Controlador('Gris')">
+			
+			<input class="boton" id="espejo-button" type="button" value="Espejo">
+				<div id="espejo-box" style="display: none">
+					<i class="fa fa-arrows-h fa-2x" aria-hidden="true" style="cursor: pointer" onclick="Controlador('EspejoH')"></i>
+					<i class="fa fa-arrows-v fa-2x" aria-hidden="true" style="cursor: pointer" onclick="Controlador('EspejoV')"></i>
+					<br><br>
+				</div>
+			<!-- MODAL Histograma -->
+			<!-- Trigger the modal with a button -->
+			<input type="button" class="boton" data-toggle="modal" data-target="#ModalHist" onclick="Histograma()" value="Histograma">
+			<!-- Modal -->
+			<div class="modal fade" id="ModalHist" role="dialog">
+				<div class="modal-dialog">
+
+					<!-- Modal content-->
+					<div class="modal-content ModalHist">
+					<div class="modal-header">
+						<h4 class="modal-title">Histograma</h4>
+					</div>
+					<div class="modal-body" id="ModalHistograma">
+
+					</div>
+					<div class="modal-footer">
+						<input type="button" class="btn btn-default" data-dismiss="modal" value="Close">
+					</div>
+					</div>
+
+				</div>
+			</div>
+			
+			<input class="boton" type="button" value="Ecualizar" onclick="Controlador('Ecualizar')">
+
+			<input class="boton" id="zoom-button" type="button" value="Zoom">
+				<div id="zoom-box" style="display: none">
+					<i class="fa fa-search-plus fa-2x" style="cursor: pointer"  onclick="ZoomIn()" aria-hidden="true"></i>
+					<i class="fa fa-search-minus fa-2x" style="cursor: pointer"  onclick="ZoomOut()" aria-hidden="true"></i>
+					<br><br>
+				</div>
+		</div>
+		
+		<div class="botonesRight" aling="center">
+				
+			
+			<input class="boton inter" type="button" value="Bilinear" onclick="InterpolationMethod('Bilinear')">			
+			<input class="boton inter" type="button" value="Nearest Neighbor" onclick="InterpolationMethod('NN')">
+
+			<input class="boton" id="rotar-button" type="button" value="Rotar">
+				<div id="rotar-box" style="display: none">	
+					<input type="text" class="text_field" placeholder="Grados" id="angulo">
+					<br>
+
+					<input class="botonP" type="button" value="Izquierda" onclick="RotacionI()">
+					<input class="botonP" type="button" value="Derecha" onclick="RotacionD()">
+					<br><br>
+				</div>
+
+			<input class="boton" id="brillo-button" type="button" value="Brillo">
+				<div id="brillo-box" style="display: none">
+					<input class="text_field" name='ValueBrillo' type=text id='ValueBrillo' value=0 > 
+					<br>
+					<input class="botonP" type="button" value="-" onMouseDown=" timedCountMenosBrillo('ValueBrillo', 1)" onMouseUp="stopCountBrillo()" onMouseOut="stopCountBrillo()"/>
+					<input class="botonP" type="button" value="+" onMouseDown=" timedCountMasBrillo('ValueBrillo', 1)" onMouseUp="stopCountBrillo()" onMouseOut="stopCountBrillo()"/>
+					<br><br>
+				</div>
+			
+			
+			<input class="boton" id="contraste-button" type="button" value="Contraste">
+				<div id="contraste-box" style="display: none">			
+					<input class="text_field" name='ValueContrast' type=text id='ValueContrast' value=0 > 
+					<br>
+					<input class="botonP" type="button" value="-" onMouseDown=" timedCountMenosContrast('ValueContrast', 1)" onMouseUp="stopCountContrast()" onMouseOut="stopCountContrast()"/>
+					<input class="botonP" type="button" value="+" onMouseDown=" timedCountMasContrast('ValueContrast', 1)" onMouseUp="stopCountContrast()" onMouseOut="stopCountContrast()"/>
+					<br><br>
+				</div>
+			
+			<input class="boton" id="escalar-button" type="button" value="Escalar">
+            	<div id="escalar-box" style="display: none">
+					<input class="text_field"  type="text" placeholder="Ancho:" id="newWidht">
+					<input class="text_field"  type="text" placeholder="Alto:" id="newHeight">
+					<input class="boton" type="button" value="Aplicar" onclick="Controlador('Scale')">
+					<br><br>
+				</div>
+			
+            <input class="boton" id="umbralizar-button" type="button" value="Umbralizar">
+            	<div id="umbralizar-box" style="display: none">
+					<input type="text" class="text_field" placeholder="Threshold" id="Threshold">						
+					<input class="boton" type="button" value="Aplicar" onclick="Controlador('Umbralizar')">	
+					<br><br>			
+				</div>
+            <input class="boton" id="filter-button" type="button" value="Filtros">
+            	<div id="filter-box" style="display: none">
+		            <input type="text" class="text_field" placeholder="Tamaño Kernel" id="tamanioKernel">
+		            <input class="boton" type="button" value="Borde" id="borde-filter-button">
+		            	<div id="borde-filter-box" style="display: none">
+				            <input class="botonP" type="button" value="Sobel" onclick="Filtros('Sobel')">
+				            <input class="botonP" type="button" value="Laplace" onclick="Filtros('Laplace')">
+				            <br><br>
+		            	</div>
+		            <input class="boton" type="button" value="Suzavizado" id="suavizado-filter-button">
+						<div id="suavizado-filter-box" style="display: none">
+				            <input class="botonP" type="button" value="Media" onclick="Filtros('Media')">            
+				            <input class="botonP" type="button" value="Gauss" onclick="Filtros('Gauss')">  
+				            <br><br>
+				        </div>   
+		            <!-- MODAL Matriz -->
+					<!-- Trigger the modal with a button -->
+					<input type="button" class="boton" data-toggle="modal" data-target="#Modalkernel" onclick="Crear_Kernel()" value="Crear Kernel">
+					<!-- Modal -->
+					<div class="modal fade" id="Modalkernel" role="dialog">
+						<div class="modal-dialog">
+
+							<!-- Modal content-->
+							<div class="modal-content Modalkernel">
+		                        <div class="modal-header">
+		                            <h4 class="modal-title">Kernel de Convolucion</h4>
+		                        </div>
+		                        <div style="background-color: rgba(255,255,255, 0.93);overflow-x:auto;bottom:0;left:0;right:0;top:0;z-index:9999;"  class="modal-body" id="Modal_Kernel_Convulusion"  >
+
+		                        </div>
+		                        <div class="modal-footer">
+		                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Crear">
+		                        </div>
+							</div>
+
+						</div>
+					</div>	
+		            <input class="boton" type="button" value="Propio" onclick="Filtros('Propio')">	
+		            
+					<input type="text" class="text_field" placeholder="Peso" id="peso">
+		            <input class="boton" type="button" value="Perfilado" onclick="Filtros('Perfilado')">	
+	            </div>
+            
+		</div>
+		<div class="text-center">
+			<canvas class="CuadroImagen" id="canvas1"> No posee Canvas </canvas>	
+		</div>
+
+	</body>
+   
+   <script>
+ 
+    });
+
+	   $( "#zoom-button" ).click(function() {
+	       $( "#zoom-box" ).toggle( "slow" );
+		  $( this ).toggleClass( "highlight" );
+	   });
+
+	   $( "#espejo-button" ).click(function() {
+	       $( "#espejo-box" ).toggle( "slow" );
+		  $( this ).toggleClass( "highlight" );
+	   });
+
+	   $( "#umbralizar-button" ).click(function() {
+	       $( "#umbralizar-box" ).toggle( "slow" );
+		  $( this ).toggleClass( "highlight" );
+	   });
+
+	   $( "#escalar-button" ).click(function() {
+	       $( "#escalar-box" ).toggle( "slow" );
+		  $( this ).toggleClass( "highlight" );
+	   });
+
+	   $( "#rotar-button" ).click(function() {
+	       $( "#rotar-box" ).toggle( "slow" );
+		  $( this ).toggleClass( "highlight" );
+	   });
+
+	   $( "#brillo-button" ).click(function() {
+	       $( "#brillo-box" ).toggle( "slow" );
+		  $( this ).toggleClass( "highlight" );
+	   });
+
+	   $( "#contraste-button" ).click(function() {
+	       $( "#contraste-box" ).toggle( "slow" );
+		  $( this ).toggleClass( "highlight" );
+	   });
+
+	   $( "#filter-button" ).click(function() {
+		  $( this ).toggleClass( "highlight" );
+	       $( "#filter-box" ).toggle( "slow" );
+	   });
+
+	   $( "#borde-filter-button" ).click(function() {
+		  $( this ).toggleClass( "highlight" );
+	       $( "#borde-filter-box" ).toggle( "slow" );
+	   });
+
+	   $( "#suavizado-filter-button" ).click(function() {
+		  $( this ).toggleClass( "highlight" );
+	       $( "#suavizado-filter-box" ).toggle( "slow" );
+	   });
+
+	   var canvas1 = document.getElementById('canvas1'),
+   		   ctx1 = canvas1.getContext('2d'),
+   		   inputElement = document.getElementById("input"),
+   		   Imagen,
+		   ImagenOriginal,
+   		   bmp,
+   		   name,
+		   info,
+		   factorZoom = 1,
+		   rotar = false,
+		   bl = true,
+		   estaGris,
+		   undo = [];
+		   redo = [];
+		   anguloD = 0;
+		   redoAngulos = [];
+		   undoAngulos = [];
+   		   
+       inputElement.addEventListener("change",handleFiles, false);
+       
+       document.getElementById('download').addEventListener('click', function() {
+			downloadCanvas(this, 'canvas1', name);
+		}, false);
+		
+   		//Brilo
+   		var cB=0
+		var tB
+
+		function timedCountMasBrillo(inputName, vnum){
+			holaB = inputName;
+			xB = vnum;
+			document.getElementById(inputName).value=cB;
+			if (cB<255){
+				cB=cB+xB;
+				cB=Math.round(cB*100)/100;
+				tB=setTimeout("timedCountMasBrillo(holaB, xB)", 66);
+				Brillo(cB);
+			}
+		}
+
+		function timedCountMenosBrillo(inputName, vnum) {
+			holaB = inputName;
+			xB = vnum;
+			document.getElementById(inputName).value=cB;
+			if (cB>-255) { 
+				cB=cB-xB;
+				cB=Math.round(cB*100)/100;
+				tB=setTimeout("timedCountMenosBrillo(holaB, xB)", 66); 
+				Brillo(cB);
+			}
+		}
+
+		function stopCountBrillo()
+		{
+			clearTimeout(tB);
+		}
+   
+   		//Contraste
+   		var cC=0
+		var tC
+
+		function timedCountMasContrast(inputName, vnum){
+			holaC = inputName;
+			xC = vnum;
+			document.getElementById(inputName).value=cC;
+			if (cC<255){
+				cC=cC+xC;
+				cC=Math.round(cC*100)/100;
+				tC=setTimeout("timedCountMasContrast(holaC, xC)", 66);
+				Contraste(cC);
+			}
+		}
+
+		function timedCountMenosContrast(inputName, vnum){
+			holaC = inputName;
+			xC = vnum;
+			document.getElementById(inputName).value=cC;
+			if (cC>-255) { 
+				cC=cC-xC;
+				cC=Math.round(cC*100)/100;
+				tC=setTimeout("timedCountMenosContrast(holaC, xC)", 66); 
+				Contraste(cC);
+			}
+		}
+
+		function stopCountContrast(){
+			clearTimeout(tC);
+		}
+   	
+   	</script>
+    
+    
+</html>
+
+
+
+
