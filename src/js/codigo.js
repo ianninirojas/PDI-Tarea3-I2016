@@ -830,29 +830,34 @@ function Interpolation( imagedata, x, y) {
 function Filtros(opcion){
     
     tam = document.getElementById("tamanioKernel").value
-    
-    if (opcion == "Sobel") {
-		Sobel(tam);
-	}
-	else if (opcion == "Laplace") {
-		Laplace(tam);
-	}
-	else if (opcion == "Perfilado") {
-		Perfilado(tam);
-	}
-	else if (opcion == "Media") {
-		Media(tam);
-	}    
-	else if (opcion == "Gauss") {
-		Gauss(tam);
-	} 
-	else if (opcion == "Propio") {
-		Propio(tam);
-	}
-	undo.push(Imagen);
-	factorZoom = 1;
-	if 	(rotar) {Rotar(0);}
-	else 		{pintar(Imagen,Imagen.width, Imagen.height);}
+
+    if (tam > 0) {
+	    if (opcion == "Sobel") {
+			Sobel(tam);
+		}
+		else if (opcion == "Laplace") {
+			Laplace(tam);
+		}
+		else if (opcion == "Perfilado") {
+			Perfilado(tam);
+		}
+		else if (opcion == "Media") {
+			Media(tam);
+		}    
+		else if (opcion == "Gauss") {
+			Gauss(tam);
+		} 
+		else if (opcion == "Propio") {
+			Propio(tam);
+		}
+		undo.push(Imagen);
+		factorZoom = 1;
+		if 	(rotar) {Rotar(0);}
+		else 		{pintar(Imagen,Imagen.width, Imagen.height);}
+    }
+    else {
+    	alert("Escoja un numero mayor a 0")
+    }   
        
 }
 
