@@ -23,14 +23,14 @@ Procesamiento Digital de Imagen
 ----------
 
 
-##Tarea 3
+## Tarea 3
 Operaciones a imágenes de formato .bmp
 
 
 ----------
 
 
-##Lenguajes Empleados:
+## Lenguajes Empleados:
 1. JavaScript: Manipulación de imagen
 2. HTML: Interfaz gráfica
 3. CSS: Estilo interfaz gráfica
@@ -39,21 +39,21 @@ Operaciones a imágenes de formato .bmp
 ----------
 
 
-##Descripción
+## Descripción
 Manipulación de imágenes en formato .bmp
 
 
 ----------
 
 
-##Ejecución
+## Ejecución
 Abrir el documento index.html ubicado en la carpeta src. Este abrirá un navegador web, en donde se encuentra una interfaz la cual tiene una serie de botones.
 
 
 ----------
 
 
-###Opciones a escoger 
+### Opciones a escoger 
  1. **Información**: Despliega un modal con la información mas importante de la imagen.
  2. **Original**: Muestra la imagen cargada originalmente.
  3. **Negativo**: Calculo el negativo de la imagen actual y la muestra.
@@ -100,6 +100,6 @@ Abrir el documento index.html ubicado en la carpeta src. Este abrirá un navegad
 ----------
 
 
-##Version
+## Version
 1.0
 
